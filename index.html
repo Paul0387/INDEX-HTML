@@ -3,33 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frauenarztzentrum Saarpfalz</title>
+  <title id="dynamicTitle">Frauenarztzentrum Saarpfalz</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/timezone/1.0.23/timezone-with-data.min.js"></script>
   <style>
+    :root {
+      --primary-color: #A53055;
+    }
     body {
       position: relative;
-      background-image: url('https://faz-saar.de/wp-content/uploads/2023/02/Wartezimmer-1200x800.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+      background-color: white;
       color: white;
       font-family: Arial, sans-serif;
       padding-top: 80px;
+      margin: 0;
+      overflow-x: hidden;
     }
-
-    body::before {
-      content: "";
-      position: absolute;
+    .bg-container {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 200%;
-      background-color: rgba(211, 211, 211, 0.7);
-      filter: blur(5px);
+      height: 100%;
       z-index: -2;
     }
-
+    .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://faz-saar.de/wp-content/uploads/2023/02/Wartezimmer-1200x800.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: scroll;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(211, 211, 211, 0.7);
+      filter: blur(5px);
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
     .navbar {
       position: fixed;
       top: 0;
@@ -37,20 +59,19 @@
       width: 100%;
       display: flex;
       align-items: center;
-      background-color: #7a5274;
+      background-color: var(--primary-color);
       padding: 10px 10px;
       z-index: 1000;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
-
     .navbar img {
       height: 90px;
       margin-right: 50px;
       background-color: white;
       padding: 5px;
       border-radius: 10px;
+      cursor: pointer;
     }
-
     .navbar a {
       text-decoration: none;
       color: white;
@@ -59,11 +80,9 @@
       font-size: 18px;
       transition: background-color 0.3s;
     }
-
     .navbar a:hover {
       background-color: #575757;
     }
-
     .content {
       position: relative;
       z-index: 1;
@@ -71,14 +90,12 @@
       padding: 20px;
       padding-top: 150px;
     }
-
     .page-title {
       font-size: 50px;
-      color: #A53055;
+      color: var(--primary-color);
       margin-top: 40px;
       margin-bottom: 10px;
     }
-
     .page-subtitle {
       font-size: 20px;
       color: black;
@@ -86,7 +103,6 @@
       margin-bottom: 30px;
       line-height: 1.7;
     }
-
     .additional-text {
       font-size: 25px;
       color: black;
@@ -94,7 +110,6 @@
       margin-bottom: 15px;
       line-height: 1.8;
     }
-
     .carousel-container {
       position: relative;
       margin: 10px auto;
@@ -103,19 +118,17 @@
       border-radius: 8px;
       z-index: 1;
       background-color: rgba(245, 245, 245, 0.9);
+      touch-action: pan-y;
     }
-
     .carousel {
       display: flex;
       width: 100%;
       transition: transform 0.5s ease-in-out;
     }
-
     .carousel img {
       min-width: 100%;
       height: auto;
     }
-
     .carousel .arrow {
       position: absolute;
       top: 50%;
@@ -129,11 +142,8 @@
       z-index: 2;
       border-radius: 50%;
     }
-
     .carousel .arrow.left { left: 10px; }
     .carousel .arrow.right { right: 10px; }
-
-    /* Modal-Stile */
     .modal {
       display: none;
       position: fixed;
@@ -146,7 +156,6 @@
       justify-content: center;
       align-items: center;
     }
-    
     .modal-content {
       background-color: #fefefe;
       margin: 5% auto;
@@ -157,7 +166,6 @@
       max-width: 600px;
       position: relative;
     }
-    
     .close {
       position: absolute;
       right: 20px;
@@ -167,33 +175,27 @@
       color: #aaa;
       cursor: pointer;
     }
-    
-    /* Zurück-Button */
     .back-btn {
       position: absolute;
       left: 20px;
       top: 15px;
       font-size: 13px;
       font-weight: bold;
-      color: #A53055;
+      color: var(--primary-color);
       cursor: pointer;
       background: none;
       border: none;
       display: none;
     }
-    
-    /* Formularstile */
     .form-group {
       margin-bottom: 20px;
     }
-    
     label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
       color: black;
     }
-    
     input[type="text"],
     input[type="email"],
     input[type="tel"],
@@ -201,16 +203,14 @@
     select {
       width: 100%;
       padding: 10px;
-      border: 2px solid #A53055;
+      border: 2px solid var(--primary-color);
       border-radius: 4px;
       box-sizing: border-box;
     }
-    
-    /* Button-Stile */
     .btn {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #A53055;
+      background-color: var(--primary-color);
       color: white;
       border: none;
       border-radius: 4px;
@@ -219,104 +219,86 @@
       text-decoration: none;
       font-size: 16px;
       transition: background-color 0.3s;
-      border: 2px solid #A53055;
-      margin: 0 auto; /* Diese Zeile zentriert den Button */
-      display: block; /* Damit margin: auto funktioniert */
+      border: 2px solid var(--primary-color);
+      margin: 0 auto;
+      display: block;
     }
-    
     .btn:hover {
       background-color: white;
       color: black;
     }
-    
     .btn-secondary {
       background-color: #f44336;
     }
-    
     .btn-secondary:hover {
       background-color: #d32f2f;
     }
-    
-    /* Zeitauswahl */
     .time-slots {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       gap: 10px;
       margin-top: 20px;
     }
-    
     .time-slot {
       padding: 10px;
       text-align: center;
-      background-color: #A53055;
+      background-color: var(--primary-color);
       color: white;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s;
-      border: 2px solid #A53055;
+      border: 2px solid var(--primary-color);
     }
-    
     .time-slot:hover {
       background-color: white;
       color: black;
     }
-    
     .time-slot.booked {
       background-color: #cccccc;
       color: #666666;
       cursor: not-allowed;
       border: 2px solid #999999;
     }
-    
-    /* Standortauswahl */
     .location-options {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 10px;
       margin-top: 30px;
     }
-    
     .location-option {
       padding: 15px;
       text-align: center;
       background-color: white;
-      color: #A53055;
+      color: var(--primary-color);
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s;
-      border: 2px solid #A53055;
+      border: 2px solid var(--primary-color);
     }
-    
     .location-option:hover {
       background-color: white;
       color: black;
     }
-    
-    /* Terminart-Auswahl */
     .appointment-options {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 10px;
       margin-top: 30px;
     }
-    
     .appointment-option {
       padding: 15px;
       text-align: center;
       background-color: white;
-      color: #A53055;
+      color: var(--primary-color);
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s;
-      border: 2px solid #A53055;
+      border: 2px solid var(--primary-color);
     }
-    
     .appointment-option:hover {
       background-color: white;
       color: black;
     }
-    
-    /* Error messages */
     .error-message {
       color: red;
       font-size: 14px;
@@ -324,31 +306,29 @@
       margin-bottom: 10px;
       display: none;
     }
-
-    /* Confirmation message */
     .confirmation-message {
       text-align: center;
       color: black;
       margin-bottom: 20px;
     }
-
     .termin-btn {
-      background-color: #A53055;
+      background-color: var(--primary-color);
       color: white;
       padding: 10px 10px;
       border-radius: 5px;
       cursor: pointer;
       margin-left: 5px;
-      border: 2px solid #A53055;
+      border: 2px solid var(--primary-color);
       transition: background-color 0.3s, color 0.3s;
+      filter: brightness(0.8);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      font-weight: bold;
     }
-
     .termin-btn:hover {
       background-color: white;
       color: black;
-      border: 2px solid #A53055;
+      filter: none;
     }
-
     .button-container {
       display: flex;
       flex-direction: column;
@@ -356,65 +336,905 @@
       width: 100%;
       margin-top: 15px;
     }
-
-    /* Neue Stile für die Titel */
     .modal-title {
-      color: #A53055;
+      color: var(--primary-color);
       margin-bottom: 30px;
       text-align: center;
       font-size: 24px;
       margin-top: 20px;
     }
-    
     .section-title {
-      font-size: 20px;
-      color: #A53055;
+      font-size: 50px;
+      color: black;
       margin-bottom: 25px;
       text-align: center;
+      font-weight: normal;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 20%;
+      width: 60%;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+    .content-section {
+      text-align: center;
+      padding: 50px;
+      margin-top: 100px;
+      background-color: white;
+    }
+    .content-section.aktuelles {
+      background-color: #f8f8f8;
+    }
+    .team-image-container {
+      margin-top: 50px;
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+    .team-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.5s ease, box-shadow 0.3s ease;
+    }
+    .team-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+    .birthdate-selector {
+      display: flex;
+      gap: 10px;
+    }
+    .birthdate-selector select {
+      padding: 10px;
+      border: 2px solid var(--primary-color);
+      border-radius: 4px;
+      width: 100%;
+    }
+    /* Media Queries für Tablets */
+    @media (max-width: 1024px) {
+      body {
+        font-size: 14px;
+      }
+    }
+    /* Media Queries für Mobilgeräte */
+    @media (max-width: 768px) {
+      body {
+        font-size: 12px;
+        overflow-x: hidden;
+      }
+      .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+      .navbar img {
+        height: 60px;
+        margin-right: 0;
+      }
+      .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--primary-color);
+        position: absolute;
+        top: 80px;
+        left: 0;
+      }
+      .navbar-links.active {
+        display: flex;
+      }
+      .navbar a {
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        border-bottom: 1px solid #575757;
+      }
+      .burger {
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        margin-left: 20px;
+      }
+      .burger div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 5px;
+        transition: all 0.3s ease;
+      }
+      .burger.active div:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      .burger.active div:nth-child(2) {
+        opacity: 0;
+      }
+      .burger.active div:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+      .content {
+        padding-top: 120px;
+      }
+      .page-title {
+        font-size: 30px;
+      }
+      .page-subtitle {
+        font-size: 16px;
+      }
+      .additional-text {
+        font-size: 18px;
+      }
+      .carousel-container {
+        max-width: 250px;
+      }
+      .modal-content {
+        width: 90%;
+        max-width: 500px;
+        margin: 5% auto;
+        padding: 20px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .time-slots {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .location-options, .appointment-options, .time-slots {
+        grid-template-columns: 1fr;
+      }
+      .team-image-container {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 30px;
+      }
+      .section-title {
+        font-size: 30px;
+      }
+      .section-title::after {
+        left: 5%;
+        width: 90%;
+      }
+      .team-image {
+        width: 100%;
+        margin: 10px auto;
+        max-height: 400px;
+        object-fit: contain;
+      }
+      .welcome-subtitle {
+        font-size: 20px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+      .welcome-text {
+        font-size: 14px;
+        margin-bottom: 10px;
+        line-height: 1.5;
+        max-width: 90%;
+      }
+      .location-info, .phone-info {
+        flex-direction: column;
+        align-items: center;
+      }
+      .location-item, .phone-item {
+        margin: 10px 0;
+      }
+      /* Mobile-specific arrangement */
+      .location-info {
+        order: 1;
+      }
+      .phone-info {
+        order: 2;
+      }
+      .location-item:nth-child(1) {
+        order: 1;
+      }
+      .phone-item:nth-child(1) {
+        order: 2;
+      }
+      .location-item:nth-child(2) {
+        order: 3;
+      }
+      .phone-item:nth-child(2) {
+        order: 4;
+      }
+    }
+    /* Media Queries für sehr kleine Mobilgeräte */
+    @media (max-width: 480px) {
+      body {
+        font-size: 10px;
+      }
+      .page-title {
+        font-size: 24px;
+      }
+      .page-subtitle {
+        font-size: 14px;
+      }
+      .additional-text {
+        font-size: 16px;
+      }
+      .carousel-container {
+        max-width: 200px;
+      }
+      .team-image-container {
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 20px;
+      }
+      .section-title {
+        font-size: 24px;
+      }
+      .team-image {
+        width: 100%;
+        margin: 5px auto;
+        max-height: 350px;
+        object-fit: contain;
+      }
+      .welcome-subtitle {
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        line-height: 1.3;
+      }
+      .welcome-text {
+        font-size: 12px;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        max-width: 95%;
+      }
+    }
+    /* Flatpickr Kalender-Stile */
+    .flatpickr-calendar {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 5px;
+    }
+    .flatpickr-day {
+      color: #333;
+    }
+    .flatpickr-day.today {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+      color: #ccc;
+    }
+    .flatpickr-day.disabled,
+    .flatpickr-day.disabled:hover,
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+      background: #f5f5f5;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    .flatpickr-day:hover {
+      background: #f0f0f0;
+      border-color: #f0f0f0;
+    }
+    .flatpickr-day.selected {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    /* Neue Stile für den Text unter dem Teambild */
+    .welcome-subtitle {
+      font-size: 30px;
+      color: var(--primary-color);
+      margin-top: 60px;
+      margin-bottom: 40px;
+    }
+    .welcome-text {
+      font-size: 16px;
+      color: black;
+      margin-bottom: 15px;
+      line-height: 1.6;
+      text-align: center;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Stile für die Aktuelles-Sektion */
+    .news-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .news-item {
+      flex: 1;
+      min-width: 300px;
+      max-width: 350px;
+      text-align: center;
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .news-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: transform 0.5s ease, box-shadow 0.3s ease;
+    }
+    .news-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+    .news-subtitle {
+      font-size: 20px;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .news-text {
+      font-size: 16px;
+      color: black;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    /* Facebook Icon Style */
+    .facebook-section {
+      margin-top: 70px;
+      text-align: center;
+    }
+    .facebook-text {
+      font-size: 20px;
+      color: black;
+      margin-bottom: 20px;
+    }
+    .facebook-icon {
+      font-size: 50px;
+      color: #7a5274;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .facebook-icon:hover {
+      transform: scale(1.1);
+    }
+    /* Kontakt Section Style */
+    .contact-section {
+      margin-top: 70px;
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .contact-title {
+      font-size: 50px;
+      color: black;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: normal;
+      position: relative;
+      display: inline-block;
+    }
+    .contact-title::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 20%;
+      width: 60%;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+    .contact-text {
+      font-size: 20px;
+      color: black;
+      margin-bottom: 60px;
+      margin-top: 40px;
+    }
+    .location-icon {
+      font-size: 30px;
+      color: #7a5274;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      vertical-align: middle;
+    }
+    .location-icon:hover {
+      transform: scale(1.1);
+    }
+    .location-info {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .location-item {
+      margin: 0 20px;
+      text-align: center;
+    }
+    .phone-icon {
+      font-size: 25px;
+      color: #7a5274;
+      margin: 30px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      vertical-align: middle;
+    }
+    .phone-icon:hover {
+      transform: scale(1.1);
+    }
+    .phone-info {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .phone-item {
+      margin: 0 55px;
+      text-align: center;
+    }
+    /* Ensure text color is black */
+    .location-item p, .phone-item p {
+      color: black;
+    }
+    .phone-link {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    .phone-link:hover {
+      text-decoration: underline;
+    }
+    /* Google Maps iframe style */
+    .map-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .map-item {
+      margin: 0 20px;
+      text-align: center;
+    }
+    .map-item iframe {
+      border: 0;
+      width: 300px;
+      height: 200px;
+      border-radius: 8px;
+    }
+
+    /* Chatbot Styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      max-height: 500px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    .chatbot-container.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .chatbot-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    
+    .chatbot-title {
+      font-size: 18px;
       font-weight: bold;
+    }
+    
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .chatbot-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+    }
+    
+    .message {
+      margin-bottom: 15px;
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      line-height: 1.4;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .bot-message {
+      background-color: #e5e5ea;
+      color: black;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+    
+    .user-message {
+      background-color: var(--primary-color);
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+    
+    .quick-reply {
+      display: inline-block;
+      background-color: #f0f0f0;
+      color: black;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+    
+    .quick-reply:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .quick-reply.primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .quick-reply.primary:hover {
+      background-color: #8a2745;
+    }
+    
+    .chatbot-input-container {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background-color: white;
+    }
+    
+    .chatbot-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+    }
+    
+    .chatbot-send {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chatbot-send:hover {
+      background-color: #8a2745;
+    }
+    
+    .chatbot-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: transform 0.3s ease;
+    }
+    
+    .chatbot-button:hover {
+      transform: scale(1.1);
+    }
+    
+    .chatbot-button-icon {
+      font-size: 24px;
+    }
+    
+    .typing-indicator {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #e5e5ea;
+      border-radius: 18px;
+    }
+    
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #666;
+      border-radius: 50%;
+      margin: 0 2px;
+      opacity: 0.4;
+    }
+    
+    .typing-indicator span:nth-child(1) {
+      animation: typing 1s infinite;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation: typing 1s infinite 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation: typing 1s infinite 0.4s;
+    }
+    
+    @keyframes typing {
+      0% { opacity: 0.4; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+      100% { opacity: 0.4; transform: translateY(0); }
+    }
+    
+    .appointment-slot {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .appointment-slot:hover {
+      background-color: #8a2745;
+    }
+    
+    .appointment-slot.booked {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .form-group-chatbot {
+      margin-bottom: 15px;
+    }
+    
+    .form-group-chatbot label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .form-group-chatbot input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .chatbot-form-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    
+    .chatbot-form-button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .chatbot-form-button.primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .chatbot-form-button.secondary {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    
+    .confirmation-message-chatbot {
+      background-color: #e8f5e9;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 480px) {
+      .chatbot-container {
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+        max-height: 70vh;
+      }
+      
+      .chatbot-button {
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <img src="prototyp/Webseite/Online/logo.png" alt="Logo">
-    <a href="index.html#sprechzeiten">Sprechzeiten</a>
-    <a href="index.html#aktuelles">Aktuelles</a>
-    <a href="team.html">Team</a>
-    <a href="Standorte.html">Standorte</a>
-    <a href="Leistungen.html">Leistungen</a>
-    <a href="index.html#kontakt">Kontakt</a>
-    <button class="termin-btn" id="myBtn">Termin vereinbaren</button>
+  <div class="bg-container">
+    <div class="bg-image" id="bgImage"></div>
+    <div class="bg-overlay" id="bgOverlay"></div>
   </div>
-
-  <div class="content">
-    <h1 class="page-title">Frauenarztzentrum Saarpfalz</h1>
-    <p class="page-subtitle">Fachärztinnen für Gynäkologie und Geburtshilfe</p>
-    <p class="additional-text">
+  <div class="navbar">
+    <img src="images/logo.png" alt="Logo" id="logo">
+    <div class="burger" id="burger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="navbar-links" id="navbarLinks">
+      <a href="#top">Sprechzeiten</a>
+      <a href="#aktuelles">Aktuelles</a>
+      <a href="team.html">Team</a>
+      <a href="Standorte.html">Standorte</a>
+      <a href="Leistungen.html">Leistungen</a>
+      <a href="#kontakt">Kontakt</a>
+      <button class="termin-btn" id="myBtn">Termin vereinbaren</button>
+    </div>
+  </div>
+  <div class="content" id="top">
+    <h1 class="page-title" id="mainTitle">Frauenarztzentrum Saarpfalz</h1>
+    <p class="page-subtitle" id="mainSubtitle">Fachärztinnen für Gynäkologie und Geburtshilfe</p>
+    <p class="additional-text" id="mainDoctors">
       DR. MED. NICOLE NATALE | DR. MED. KATHY NEUMANN | SITA NGOUMOU | DR. MED FREDERIKE SCHLAEGEL
     </p>
   </div>
-
   <div class="carousel-container" id="photoCarousel">
     <div class="carousel">
-      <img src="static/images/Zeit.png" alt="Photo 1">
-      <img src="static/images/background2.png" alt="Photo 2">
+      <img src="images/background.jpg" alt="Background">
+      <img src="images/background2.png" alt="Background2">
       <button class="arrow left">&#10094;</button>
       <button class="arrow right">&#10095;</button>
     </div>
   </div>
-
   <div class="button-container">
     <button class="termin-btn" id="myBtn2">Termin vereinbaren</button>
   </div>
-
-  <!-- Modal Dialog -->
+  <div class="content-section">
+    <h2 class="section-title">WIR SIND FÜR SIE DA!</h2>
+    <div class="team-image-container">
+      <img src="images/Teambild.jpg" alt="Teambild" class="team-image">
+    </div>
+    <h3 class="welcome-subtitle">Willkommen auf der Seite des Frauenarztzentrum SaarPfalz!</h3>
+    <p class="welcome-text">
+      Unsere langjährige Erfahrung in Klinik und Praxis hat uns gezeigt, dass medizinische Erfahrung, fundierte Kenntnisse verbunden mit Ruhe und Zeit, die wichtigsten Faktoren in der Beziehung zwischen Arzt und Patientin sind.
+    </p>
+    <p class="welcome-text">
+      Es ist uns wichtig, dass Sie eine individuelle Beratung und Behandlung in der hierfür erforderlichen Zeit in ruhiger und angenehmer Atmosphäre erhalten. Bei allem steht immer die Patientin mit ihren individuellen Fragen, Sorgen und Bedürfnissen im Mittelpunkt unseres Handelns.
+    </p>
+  </div>
+  <div class="content-section aktuelles" id="aktuelles">
+    <h2 class="section-title">Aktuelles</h2>
+    <div class="news-container">
+      <div class="news-item">
+        <img src="images/Uhr.png" alt="Öffnungszeiten KW19" class="news-image">
+        <h3 class="news-subtitle">Öffnungszeiten KW19</h3>
+        <p class="news-text">
+          In Kalenderwoche 19 gelten in beiden Praxen leicht angepasste Öffnungszeiten.
+        </p>
+        <p class="news-text">
+          Homburg: Mo 8–16 Uhr, Mi 7:30–13 Uhr<br>
+          Blieskastel: Mo 8–16 Uhr, Mi 8–13 Uhr<br>
+          An den übrigen Tagen sind wir wie gewohnt für Sie da.
+        </p>
+      </div>
+      <div class="news-item">
+        <img src="images/Viktoria.png" alt="Neue Kollegin" class="news-image">
+        <h3 class="news-subtitle">Neue Kollegin ab dem 01.02</h3>
+        <p class="news-text">
+          Ab Februar dürfen wir eine neue Ärztin in unserem Team begrüßen.
+        </p>
+        <p class="news-text">
+          Viktoria Mielke wird uns als Weiterbildungsassistenz unterstützen.
+        </p>
+        <p class="news-text">
+          Herzlich Willkommen!
+        </p>
+      </div>
+      <div class="news-item">
+        <img src="images/telefon.jpg" alt="Neue digitale Mitarbeiterin" class="news-image">
+        <h3 class="news-subtitle">Neue digitale Mitarbeiterin!</h3>
+        <p class="news-text">
+          Durch unsere digitale Mitarbeiterin RITA erreichen Sie unsere Praxis jetzt ohne Wartezeit.
+        </p>
+        <p class="news-text">
+          Mit einem Anruf können Sie Ihr Anliegen an RITA übergeben. Anschließend melden wir uns zeitnah (spätestens innerhalb 24 Stunden) bei Ihnen zurück, auch per SMS.
+        </p>
+      </div>
+    </div>
+    <div class="facebook-section">
+      <p class="facebook-text">Wir sind auch auf Facebook für Sie da!</p>
+      <a href="https://www.facebook.com/people/Frauenarzt-Zentrum-SaarPfalz/100057385812903/" target="_blank">
+        <i class="fab fa-facebook facebook-icon"></i>
+      </a>
+    </div>
+  </div>
+  <div class="contact-section" id="kontakt">
+    <h2 class="contact-title">Kontakt</h2>
+    <p class="contact-text">Sie möchten einen Termin reservieren, haben eine Frage oder einen Wunsch?</p>
+    <div class="location-info">
+      <div class="location-item">
+        <i class="fas fa-map-marker-alt location-icon"></i>
+        <p>Eisenbahnstr. 52, 66424 Homburg</p>
+      </div>
+      <div class="location-item">
+        <i class="fas fa-map-marker-alt location-icon"></i>
+        <p>Alte Marktstr. 1, 66440 Blieskastel</p>
+      </div>
+    </div>
+    <div class="map-container">
+      <div class="map-item">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2578.9999999999995!2d7.339999999999999!3d49.32999999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47960a0000000001%3A0x0!2sEisenbahnstr.%2052%2C%2066424%20Homburg!5e0!3m2!1sde!2sde!4v1623456789123!5m2!1sde!2sde" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+      <div class="map-item">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2578.9999999999995!2d7.269999999999999!3d49.23999999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4795e00000000001%3A0x0!2sAlte%20Marktstr.%201%2C%2066440%20Blieskastel!5e0!3m2!1sde!2sde!4v1623456789123!5m2!1sde!2sde" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+    <div class="phone-info">
+      <div class="phone-item">
+        <i class="fas fa-phone phone-icon"></i>
+        <p><a href="tel:+4968418189700" class="phone-link">TEL: 0 68 41-81 89 700</a></p>
+        <p><a href="tel:+49684167041" class="phone-link">FAX: 0 68 41-6 70 41</a></p>
+      </div>
+      <div class="phone-item">
+        <i class="fas fa-phone phone-icon"></i>
+        <p><a href="tel:+4968428059700" class="phone-link">TEL: 0 68 42-80 59 700</a></p>
+        <p><a href="tel:+496842536131" class="phone-link">FAX: 0 68 42-53 61 31</a></p>
+      </div>
+    </div>
+  </div>
   <div id="bookingModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <button class="back-btn" id="backBtn">← Zurück</button>
-      
-      <!-- Standortauswahl -->
       <div id="locationSelection">
         <h2 class="modal-title">Wählen Sie ihren Standort</h2>
         <div class="confirmation-message" id="locationConfirmation"></div>
@@ -423,8 +1243,6 @@
           <div class="location-option" data-location="Blieskastel">Blieskastel</div>
         </div>
       </div>
-      
-      <!-- Terminart-Auswahl -->
       <div id="appointmentTypeSelection" style="display: none;">
         <h2 class="modal-title">Terminart</h2>
         <div class="confirmation-message" id="appointmentTypeConfirmation"></div>
@@ -438,8 +1256,6 @@
           <div class="appointment-option" data-option="Teenagersprechstunde">Teenagersprechstunde</div>
         </div>
       </div>
-      
-      <!-- Datumsauswahl -->
       <div id="dateSelection" style="display: none;">
         <h2 class="modal-title">Wählen Sie ein Datum</h2>
         <div class="confirmation-message" id="dateConfirmation"></div>
@@ -448,16 +1264,12 @@
         </div>
         <div class="error-message" id="date-error">Bitte wählen Sie ein Datum aus</div>
       </div>
-      
-      <!-- Zeitauswahl -->
       <div id="timeSelection" style="display: none;">
         <h2 class="modal-title">Wählen Sie eine Uhrzeit</h2>
         <div class="confirmation-message" id="timeConfirmation"></div>
         <div class="time-slots" id="timeSlotsContainer"></div>
         <div class="error-message" id="time-error">Bitte wählen Sie eine Uhrzeit aus</div>
       </div>
-      
-      <!-- Patientendaten -->
       <div id="customerForm" style="display: none;">
         <h2 class="modal-title">Patientendaten</h2>
         <form id="bookingForm">
@@ -466,36 +1278,44 @@
           <input type="hidden" id="selectedDate">
           <input type="hidden" id="selectedTime">
           <input type="hidden" id="timezone" name="timezone" value="Europe/Paris">
-          
           <div class="form-group">
             <label for="customerName">Vorname*</label>
             <input type="text" id="customerName" required>
             <div class="error-message" id="name-error">Bitte geben Sie Ihren Vornamen ein</div>
           </div>
-          
           <div class="form-group">
             <label for="customerLastName">Nachname*</label>
             <input type="text" id="customerLastName" required>
             <div class="error-message" id="lastname-error">Bitte geben Sie Ihren Nachnamen ein</div>
           </div>
-          
+          <div class="form-group">
+            <label for="customerBirthdate">Geburtsdatum*</label>
+            <div class="birthdate-selector">
+              <select id="birthDay" required>
+                <option value="">Tag</option>
+              </select>
+              <select id="birthMonth" required>
+                <option value="">Monat</option>
+              </select>
+              <select id="birthYear" required>
+                <option value="">Jahr</option>
+              </select>
+            </div>
+            <div class="error-message" id="birthdate-error">Bitte geben Sie Ihr Geburtsdatum ein</div>
+          </div>
           <div class="form-group">
             <label for="customerEmail">E-Mail*</label>
             <input type="email" id="customerEmail" required>
             <div class="error-message" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein</div>
           </div>
-          
           <div class="form-group">
             <label for="customerPhone">Telefonnummer*</label>
             <input type="tel" id="customerPhone" required>
             <div class="error-message" id="phone-error">Bitte geben Sie Ihre Telefonnummer ein</div>
           </div>
-          
           <button type="submit" class="btn">Termin buchen</button>
         </form>
       </div>
-      
-      <!-- Bestätigungsnachricht -->
       <div id="confirmationMessage" style="display: none;">
         <h2 class="modal-title">Termin bestätigt!</h2>
         <div class="confirmation-message">
@@ -507,18 +1327,75 @@
     </div>
   </div>
 
+  <!-- Chatbot HTML -->
+  <div class="chatbot-button" id="chatbotToggle">
+    <i class="fas fa-comment-dots chatbot-button-icon"></i>
+  </div>
+
+  <div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-header">
+      <div class="chatbot-title">Frauenarztzentrum Saarpfalz</div>
+      <button class="chatbot-close" id="chatbotClose">&times;</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages"></div>
+    <div class="chatbot-input-container">
+      <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Schreiben Sie eine Nachricht...">
+      <button class="chatbot-send" id="chatbotSend"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Zeitzonenkonfiguration
+      // Fetch the color, title, subtitle, and doctors from the server
+      fetch('/api/settings')
+        .then(response => response.json())
+        .then(data => {
+          if (data.color) {
+            document.documentElement.style.setProperty('--primary-color', data.color);
+          }
+          if (data.title) {
+            document.getElementById('dynamicTitle').textContent = data.title;
+            document.getElementById('mainTitle').textContent = data.title;
+          }
+          if (data.subtitle) {
+            document.getElementById('mainSubtitle').textContent = data.subtitle;
+          }
+          if (data.doctors) {
+            document.getElementById('mainDoctors').textContent = data.doctors;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching settings:', error);
+        });
+      // WebSocket connection for real-time updates
+      const socket = new WebSocket(`ws://${window.location.host}`);
+      socket.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'SETTINGS_UPDATED') {
+          if (data.settings.color) {
+            document.documentElement.style.setProperty('--primary-color', data.settings.color);
+          }
+          if (data.settings.title) {
+            document.getElementById('dynamicTitle').textContent = data.settings.title;
+            document.getElementById('mainTitle').textContent = data.settings.title;
+          }
+          if (data.settings.subtitle) {
+            document.getElementById('mainSubtitle').textContent = data.settings.subtitle;
+          }
+          if (data.settings.doctors) {
+            document.getElementById('mainDoctors').textContent = data.settings.doctors;
+          }
+        }
+      });
+      // Rest of your existing JavaScript code...
+      // Timezone configuration
       const parisTimeZone = 'Europe/Paris';
-
-      // Hilfsfunktionen für Pariser Zeit
+      // Helper functions for Paris time
       function convertToParisTime(date) {
         return new Date(date.toLocaleString('en-US', { timeZone: parisTimeZone }));
       }
-
       function formatDateForParis(date) {
         const d = convertToParisTime(date);
         const year = d.getFullYear();
@@ -526,83 +1403,135 @@
         const day = String(d.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
       }
-
       function getCurrentParisTime() {
         return convertToParisTime(new Date());
       }
-
-      // DOM-Elemente
+      // DOM elements
       const modal = document.getElementById('bookingModal');
       const openBtn = document.getElementById('myBtn');
       const openBtn2 = document.getElementById('myBtn2');
       const closeBtn = document.querySelector('.close');
       const closeModalBtn = document.getElementById('closeModal');
       const backBtn = document.getElementById('backBtn');
-      
-      // Formularabschnitte
+      const logo = document.getElementById('logo');
+      // Form sections
       const locationSelection = document.getElementById('locationSelection');
       const appointmentTypeSelection = document.getElementById('appointmentTypeSelection');
       const dateSelection = document.getElementById('dateSelection');
       const timeSelection = document.getElementById('timeSelection');
       const customerForm = document.getElementById('customerForm');
       const confirmationMessage = document.getElementById('confirmationMessage');
-      
-      // Formularfelder
+      // Form fields
       const bookingForm = document.getElementById('bookingForm');
       const selectedLocationInput = document.getElementById('selectedLocation');
       const selectedAppointmentTypeInput = document.getElementById('selectedAppointmentType');
       const selectedDateInput = document.getElementById('selectedDate');
       const selectedTimeInput = document.getElementById('selectedTime');
       const dateInput = document.getElementById('bookingDate');
+      const birthDaySelect = document.getElementById('birthDay');
+      const birthMonthSelect = document.getElementById('birthMonth');
+      const birthYearSelect = document.getElementById('birthYear');
       const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-      
-      // Bestätigungsnachrichten
+      // Confirmation messages
       const locationConfirmation = document.getElementById('locationConfirmation');
       const appointmentTypeConfirmation = document.getElementById('appointmentTypeConfirmation');
       const dateConfirmation = document.getElementById('dateConfirmation');
       const timeConfirmation = document.getElementById('timeConfirmation');
-      
       // Error messages
       const errorMessages = {
         date: document.getElementById('date-error'),
         time: document.getElementById('time-error'),
         name: document.getElementById('name-error'),
         lastname: document.getElementById('lastname-error'),
+        birthdate: document.getElementById('birthdate-error'),
         email: document.getElementById('email-error'),
         phone: document.getElementById('phone-error')
       };
-      
-      // Öffne Modal
+      // Burger Menu
+      const burger = document.getElementById('burger');
+      const navbarLinks = document.getElementById('navbarLinks');
+      burger.addEventListener('click', () => {
+        navbarLinks.classList.toggle('active');
+        burger.classList.toggle('active');
+      });
+      // Logo as home button
+      logo.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      // Fill days
+      for (let i = 1; i <= 31; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        birthDaySelect.appendChild(option);
+      }
+      // Fill months
+      const months = [
+        'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+      ];
+      months.forEach((month, index) => {
+        const option = document.createElement('option');
+        option.value = index + 1;
+        option.textContent = month;
+        birthMonthSelect.appendChild(option);
+      });
+      // Fill years
+      const currentYear = new Date().getFullYear();
+      for (let i = currentYear; i >= 1900; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        birthYearSelect.appendChild(option);
+      }
+      // Initialize date picker for appointment
+      flatpickr(dateInput, {
+        locale: 'de',
+        minDate: 'today',
+        dateFormat: 'd.m.Y',
+        altInput: true,
+        altFormat: 'Y-m-d',
+        defaultDate: 'today', // Set default date to today
+        onChange: function(selectedDates, dateStr) {
+          const parisDate = convertToParisTime(selectedDates[0]);
+          const formattedDate = formatDateForParis(parisDate);
+          selectedDateInput.value = formattedDate;
+          dateConfirmation.textContent = `Datum: ${dateStr}`;
+          dateSelection.style.display = 'none';
+          timeSelection.style.display = 'block';
+          backBtn.style.display = 'block';
+          loadTimeSlots(formattedDate);
+        }
+      });
+      // Open modal
       openBtn.addEventListener('click', () => {
         modal.style.display = 'block';
         resetForm();
       });
-      
       openBtn2.addEventListener('click', () => {
         modal.style.display = 'block';
         resetForm();
       });
-      
-      // Schließe Modal
+      // Close modal
       closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         resetForm();
       });
-      
       closeModalBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         resetForm();
       });
-      
-      // Schließe bei Klick außerhalb
+      // Close when clicking outside
       window.addEventListener('click', (e) => {
         if (e.target === modal) {
           modal.style.display = 'none';
           resetForm();
         }
       });
-      
-      // Standort auswählen
+      // Select location
       document.querySelectorAll('.location-option').forEach(option => {
         option.addEventListener('click', () => {
           const location = option.getAttribute('data-location');
@@ -613,8 +1542,7 @@
           backBtn.style.display = 'block';
         });
       });
-      
-      // Terminart auswählen
+      // Select appointment type
       document.querySelectorAll('.appointment-option').forEach(option => {
         option.addEventListener('click', () => {
           const appointmentType = option.getAttribute('data-option');
@@ -625,43 +1553,17 @@
           backBtn.style.display = 'block';
         });
       });
-      
-      // Initialisiere Datumspicker
-      flatpickr(dateInput, {
-        locale: 'de',
-        minDate: 'today',
-        dateFormat: 'd.m.Y',
-        altInput: true,
-        altFormat: 'Y-m-d',
-        onChange: function(selectedDates, dateStr) {
-          const parisDate = convertToParisTime(selectedDates[0]);
-          const formattedDate = formatDateForParis(parisDate);
-          selectedDateInput.value = formattedDate;
-          dateConfirmation.textContent = `Datum: ${dateStr}`;
-          dateSelection.style.display = 'none';
-          timeSelection.style.display = 'block';
-          backBtn.style.display = 'block';
-          
-          loadTimeSlots(formattedDate);
-        }
-      });
-      
-      // Lade verfügbare Zeiten
+      // Load available time slots
       async function loadTimeSlots(date) {
         timeSlotsContainer.innerHTML = '<p>Lade verfügbare Termine...</p>';
         customerForm.style.display = 'none';
-        
         try {
           const response = await fetch(`/api/booked-times?date=${date}`);
-
           if (!response.ok) {
             throw new Error('Server nicht erreichbar');
           }
-
           const data = await response.json();
-
           timeSlotsContainer.innerHTML = '';
-
           if (data.availableTimes.length === 0) {
             timeSlotsContainer.innerHTML = `
               <p style="color: red; text-align: center;">
@@ -673,19 +1575,16 @@
             `;
             return;
           }
-
           data.allSlots.forEach(slot => {
             const isBooked = data.bookedTimes.includes(slot);
             const slotElement = document.createElement('div');
             slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
             slotElement.textContent = slot;
-            
             if (isBooked) {
               slotElement.title = 'Termin bereits vergeben';
             } else {
               slotElement.addEventListener('click', () => selectTimeSlot(slot));
             }
-            
             timeSlotsContainer.appendChild(slotElement);
           });
         } catch (error) {
@@ -700,20 +1599,17 @@
           `;
         }
       }
-      
-      // Zeit auswählen
+      // Select time
       function selectTimeSlot(time) {
         selectedTimeInput.value = time;
         timeConfirmation.textContent = `Uhrzeit: ${time}`;
         timeSelection.style.display = 'none';
         customerForm.style.display = 'block';
         backBtn.style.display = 'block';
-        
-        // Scroll zum Formular
+        // Scroll to form
         customerForm.scrollIntoView({ behavior: 'smooth' });
       }
-      
-      // Zurück-Button-Funktionalität
+      // Back button functionality
       backBtn.addEventListener('click', () => {
         if (customerForm.style.display === 'block') {
           customerForm.style.display = 'none';
@@ -730,33 +1626,33 @@
           backBtn.style.display = 'none';
         }
       });
-      
-      function goBackToDate() {
+      window.goBackToDate = function() {
         timeSelection.style.display = 'none';
         dateSelection.style.display = 'block';
       }
-      
-      // Formular absenden mit Validierung
+      // Submit form with validation
       bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Validierung
+        // Validation
         let isValid = true;
-        
         if (!document.getElementById('customerName').value.trim()) {
           errorMessages.name.style.display = 'block';
           isValid = false;
         } else {
           errorMessages.name.style.display = 'none';
         }
-        
         if (!document.getElementById('customerLastName').value.trim()) {
           errorMessages.lastname.style.display = 'block';
           isValid = false;
         } else {
           errorMessages.lastname.style.display = 'none';
         }
-        
+        if (!birthDaySelect.value || !birthMonthSelect.value || !birthYearSelect.value) {
+          errorMessages.birthdate.style.display = 'block';
+          isValid = false;
+        } else {
+          errorMessages.birthdate.style.display = 'none';
+        }
         const email = document.getElementById('customerEmail').value;
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           errorMessages.email.style.display = 'block';
@@ -764,21 +1660,20 @@
         } else {
           errorMessages.email.style.display = 'none';
         }
-        
         if (!document.getElementById('customerPhone').value.trim()) {
           errorMessages.phone.style.display = 'block';
           isValid = false;
         } else {
           errorMessages.phone.style.display = 'none';
         }
-        
         if (!isValid) return;
-        
         const nowInParis = getCurrentParisTime();
-        
+        // Format birthdate in DD.MM.YYYY format
+        const formattedBirthdate = `${birthDaySelect.value}.${birthMonthSelect.value}.${birthYearSelect.value}`;
         const appointmentData = {
           vorname: document.getElementById('customerName').value.trim(),
           nachname: document.getElementById('customerLastName').value.trim(),
+          geburtsdatum: formattedBirthdate,
           email: document.getElementById('customerEmail').value.trim(),
           telefon: document.getElementById('customerPhone').value.trim(),
           standort: selectedLocationInput.value,
@@ -789,10 +1684,8 @@
           created_at: nowInParis.toISOString(),
           local_created_at: nowInParis.toLocaleString('de-DE', { timeZone: parisTimeZone })
         };
-        
-        // Sende Formulardaten mit Konfliktbehandlung
+        // Send form data with conflict handling
         console.log('Sende Termindaten:', appointmentData);
-        
         fetch('/submit-form', {
           method: 'POST',
           headers: {
@@ -818,7 +1711,6 @@
             customerForm.style.display = 'none';
             confirmationMessage.style.display = 'block';
             backBtn.style.display = 'none';
-            saveAppointmentToLocalStorage(appointmentData);
           }
         })
         .catch(error => {
@@ -828,22 +1720,7 @@
           }
         });
       });
-      
-      // In localStorage speichern
-      function saveAppointmentToLocalStorage(appointment) {
-        try {
-          const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-          appointments.push({
-            ...appointment,
-            timestamp: getCurrentParisTime().toISOString()
-          });
-          localStorage.setItem('appointments', JSON.stringify(appointments));
-        } catch (e) {
-          console.error('Could not save to localStorage', e);
-        }
-      }
-      
-      // Formular zurücksetzen
+      // Reset form
       function resetForm() {
         bookingForm.reset();
         locationSelection.style.display = 'block';
@@ -853,58 +1730,734 @@
         customerForm.style.display = 'none';
         confirmationMessage.style.display = 'none';
         backBtn.style.display = 'none';
-        
         selectedLocationInput.value = '';
         selectedAppointmentTypeInput.value = '';
         selectedDateInput.value = '';
         selectedTimeInput.value = '';
         dateInput.value = '';
         timeSlotsContainer.innerHTML = '';
-        
         locationConfirmation.textContent = '';
         appointmentTypeConfirmation.textContent = '';
         dateConfirmation.textContent = '';
         timeConfirmation.textContent = '';
-        
         Object.values(errorMessages).forEach(msg => msg.style.display = 'none');
       }
-      
-      // Nachrichtenaustausch für Terminaktualisierungen
-      window.addEventListener('message', function(event) {
-        if (event.data.type === 'APPOINTMENT_DELETED') {
-          const currentDate = document.getElementById('bookingDate').value;
-          if (currentDate) {
-            document.getElementById('bookingDate').dispatchEvent(new Event('change'));
-          }
-        }
-      });
-      
-      // Carousel-Funktionalität
+      // Carousel functionality
       let currentIndex = 0;
       const carousel = document.querySelector('.carousel');
       const images = document.querySelectorAll('.carousel img');
       const totalImages = images.length;
-      
       const showImage = (index) => {
         currentIndex = index;
         carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
       };
-      
       document.querySelector('.carousel .arrow.left').onclick = () => {
         currentIndex = (currentIndex - 1 + totalImages) % totalImages;
         showImage(currentIndex);
       };
-      
       document.querySelector('.carousel .arrow.right').onclick = () => {
         currentIndex = (currentIndex + 1) % totalImages;
         showImage(currentIndex);
       };
-      
       // Auto-rotate carousel
       setInterval(() => {
         currentIndex = (currentIndex + 1) % totalImages;
         showImage(currentIndex);
       }, 5000);
+      // Touch events for the carousel
+      let touchStartX = 0;
+      let touchEndX = 0;
+      carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+      function handleSwipe() {
+        if (touchEndX < touchStartX) {
+          // Swipe left
+          currentIndex = (currentIndex + 1) % totalImages;
+          showImage(currentIndex);
+        }
+        if (touchEndX > touchStartX) {
+          // Swipe right
+          currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+          showImage(currentIndex);
+        }
+      }
+      // New background scroll logic
+      const bgImage = document.getElementById('bgImage');
+      const bgOverlay = document.getElementById('bgOverlay');
+      const teamSection = document.querySelector('.content-section');
+      const teamSectionOffset = teamSection.offsetTop;
+      const fadeLength = teamSectionOffset * 0.7;
+      function updateBackground() {
+        const scrollPosition = window.scrollY;
+        let opacity = 1;
+        if (scrollPosition > 0) {
+          opacity = 1 - Math.min(scrollPosition / fadeLength, 1);
+        }
+        bgImage.style.opacity = opacity;
+        bgOverlay.style.opacity = opacity;
+      }
+      window.addEventListener('scroll', updateBackground);
+      updateBackground(); // Initial call
+      // Custom scroll animation
+      function smoothScrollTo(targetId, duration) {
+        const targetElement = document.getElementById(targetId);
+        const targetPosition = targetElement.getBoundingClientRect().top;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition;
+        let startTime = null;
+        function animation(currentTime) {
+          if (startTime === null) startTime = currentTime;
+          const timeElapsed = currentTime - startTime;
+          const run = ease(timeElapsed, startPosition, distance, duration);
+          window.scrollTo(0, run);
+          if (timeElapsed < duration) requestAnimationFrame(animation);
+        }
+        // Easing function for smooth animation
+        function ease(t, b, c, d) {
+          t /= d / 2;
+          if (t < 1) return c / 2 * t * t + b;
+          t--;
+          return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+        requestAnimationFrame(animation);
+      }
+      // Scroll to sections and close burger menu
+      document.querySelectorAll('.navbar-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href.startsWith('#')) {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            if (targetId === 'top') {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+            } else {
+              smoothScrollTo(targetId, 1000); // 1000ms = 1 second
+            }
+            navbarLinks.classList.remove('active');
+            burger.classList.remove('active');
+          }
+        });
+      });
+      // Scroll to the top of the page when clicking the logo
+      logo.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      // Chatbot JavaScript
+      const chatbotToggle = document.getElementById('chatbotToggle');
+      const chatbotContainer = document.getElementById('chatbotContainer');
+      const chatbotClose = document.getElementById('chatbotClose');
+      const chatbotMessages = document.getElementById('chatbotMessages');
+      const chatbotInput = document.getElementById('chatbotInput');
+      const chatbotSend = document.getElementById('chatbotSend');
+      
+      // Chatbot state
+      let chatState = 'idle'; // idle, asking_name, asking_birthdate, asking_email, asking_phone, asking_reason, selecting_date, selecting_time, confirming_appointment
+      let appointmentData = {};
+      let isTyping = false;
+      
+      // Open/close chatbot
+      chatbotToggle.addEventListener('click', function() {
+        chatbotContainer.classList.toggle('open');
+        if (chatbotContainer.classList.contains('open')) {
+          // Scroll to bottom when opening
+          setTimeout(() => {
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+          }, 100);
+        }
+      });
+      
+      chatbotClose.addEventListener('click', function() {
+        chatbotContainer.classList.remove('open');
+      });
+      
+      // Send message on enter or button click
+      chatbotInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+      
+      chatbotSend.addEventListener('click', sendMessage);
+      
+      // Initial bot message
+      setTimeout(() => {
+        addBotMessage('Hallo! Ich bin der digitale Assistent des Frauenarztzentrums Saarpfalz. Wie kann ich Ihnen helfen?', [
+          { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+          { text: 'Rezept anfordern', action: 'start_prescription' },
+          { text: 'Öffnungszeiten', action: 'opening_hours' },
+          { text: 'Kontaktinformationen', action: 'contact_info' }
+        ]);
+      }, 1000);
+      
+      // Function to add a message to the chat
+      function addMessage(text, sender, quickReplies = []) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        
+        if (sender === 'bot' && isTyping) {
+          messageDiv.innerHTML = `
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          `;
+        } else {
+          messageDiv.textContent = text;
+        }
+        
+        chatbotMessages.appendChild(messageDiv);
+        
+        if (quickReplies.length > 0) {
+          const quickRepliesDiv = document.createElement('div');
+          quickRepliesDiv.style.marginTop = '5px';
+          
+          quickReplies.forEach(reply => {
+            const replyButton = document.createElement('span');
+            replyButton.className = `quick-reply ${reply.type === 'primary' ? 'primary' : ''}`;
+            replyButton.textContent = reply.text;
+            replyButton.addEventListener('click', () => {
+              if (reply.action === 'custom') {
+                processUserInput(reply.text);
+              } else {
+                handleQuickReply(reply.action);
+              }
+            });
+            quickRepliesDiv.appendChild(replyButton);
+          });
+          
+          messageDiv.appendChild(quickRepliesDiv);
+        }
+        
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      }
+      
+      // Function to simulate bot typing
+      function showTypingIndicator() {
+        isTyping = true;
+        addMessage('', 'bot');
+        
+        setTimeout(() => {
+          isTyping = false;
+          // Remove the typing indicator
+          const messages = document.querySelectorAll('.message');
+          const lastMessage = messages[messages.length - 1];
+          if (lastMessage.querySelector('.typing-indicator')) {
+            lastMessage.remove();
+          }
+        }, 1500);
+      }
+      
+      // Function to add a bot message with optional quick replies
+      function addBotMessage(text, quickReplies = []) {
+        showTypingIndicator();
+        
+        setTimeout(() => {
+          addMessage(text, 'bot', quickReplies);
+        }, 1500);
+      }
+      
+      // Function to send a user message
+      function sendMessage() {
+        const message = chatbotInput.value.trim();
+        if (message) {
+          addMessage(message, 'user');
+          chatbotInput.value = '';
+          processUserInput(message);
+        }
+      }
+      
+      // Function to handle quick replies
+      function handleQuickReply(action) {
+        switch (action) {
+          case 'start_appointment':
+            startAppointmentProcess();
+            break;
+          case 'start_prescription':
+            startPrescriptionProcess();
+            break;
+          case 'opening_hours':
+            showOpeningHours();
+            break;
+          case 'contact_info':
+            showContactInfo();
+            break;
+          case 'confirm_appointment':
+            confirmAppointment();
+            break;
+          case 'cancel_appointment':
+            cancelAppointment();
+            break;
+          case 'change_appointment':
+            changeAppointment();
+            break;
+          case 'request_call':
+            requestCall();
+            break;
+          default:
+            addBotMessage('Wie kann ich Ihnen weiterhelfen?', [
+              { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+              { text: 'Rezept anfordern', action: 'start_prescription' },
+              { text: 'Öffnungszeiten', action: 'opening_hours' }
+            ]);
+        }
+      }
+      
+      // Function to process user input based on current state
+      function processUserInput(input) {
+        switch (chatState) {
+          case 'idle':
+            handleGeneralQuestion(input);
+            break;
+          case 'asking_name':
+            handleNameInput(input);
+            break;
+          case 'asking_birthdate':
+            handleBirthdateInput(input);
+            break;
+          case 'asking_email':
+            handleEmailInput(input);
+            break;
+          case 'asking_phone':
+            handlePhoneInput(input);
+            break;
+          case 'asking_reason':
+            handleReasonInput(input);
+            break;
+          case 'selecting_location':
+            handleLocationSelection(input);
+            break;
+          case 'selecting_date':
+            handleDateSelection(input);
+            break;
+          case 'selecting_time':
+            handleTimeSelection(input);
+            break;
+          case 'prescription_details':
+            handlePrescriptionDetails(input);
+            break;
+          default:
+            handleGeneralQuestion(input);
+        }
+      }
+      
+      // General question handling
+      function handleGeneralQuestion(input) {
+        const lowerInput = input.toLowerCase();
+        
+        if (lowerInput.includes('hallo') || lowerInput.includes('guten tag')) {
+          addBotMessage('Hallo! Wie kann ich Ihnen helfen?', [
+            { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+            { text: 'Rezept anfordern', action: 'start_prescription' }
+          ]);
+        } 
+        else if (lowerInput.includes('termin') || lowerInput.includes('vereinbaren')) {
+          startAppointmentProcess();
+        }
+        else if (lowerInput.includes('rezept') || lowerInput.includes('medikament')) {
+          startPrescriptionProcess();
+        }
+        else if (lowerInput.includes('öffnungszeit') || lowerInput.includes('geöffnet')) {
+          showOpeningHours();
+        }
+        else if (lowerInput.includes('kontakt') || lowerInput.includes('telefon')) {
+          showContactInfo();
+        }
+        else if (lowerInput.includes('danke') || lowerInput.includes('vielen dank')) {
+          addBotMessage('Gern geschehen! Gibt es sonst noch etwas, wobei ich Ihnen helfen kann?', [
+            { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+            { text: 'Rezept anfordern', action: 'start_prescription' }
+          ]);
+        }
+        else {
+          addBotMessage('Entschuldigung, ich habe das nicht verstanden. Bitte wählen Sie eine der Optionen:', [
+            { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+            { text: 'Rezept anfordern', action: 'start_prescription' },
+            { text: 'Öffnungszeiten', action: 'opening_hours' }
+          ]);
+        }
+      }
+      
+      // Show opening hours
+      function showOpeningHours() {
+        addBotMessage('Unsere Öffnungszeiten sind:\n\n' +
+          'Homburg:\n' +
+          'Montag: 8:00 - 16:00 Uhr\n' +
+          'Dienstag: 8:00 - 16:00 Uhr\n' +
+          'Mittwoch: 7:30 - 13:00 Uhr\n' +
+          'Donnerstag: 8:00 - 16:00 Uhr\n' +
+          'Freitag: 8:00 - 13:00 Uhr\n\n' +
+          'Blieskastel:\n' +
+          'Montag: 8:00 - 16:00 Uhr\n' +
+          'Dienstag: 8:00 - 16:00 Uhr\n' +
+          'Mittwoch: 8:00 - 13:00 Uhr\n' +
+          'Donnerstag: 8:00 - 16:00 Uhr\n' +
+          'Freitag: 8:00 - 13:00 Uhr', [
+            { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+            { text: 'Zurück zum Menü', action: 'menu' }
+          ]);
+      }
+      
+      // Show contact info
+      function showContactInfo() {
+        addBotMessage('Sie können uns wie folgt kontaktieren:\n\n' +
+          'Standorte:\n' +
+          '• Eisenbahnstr. 52, 66424 Homburg\n' +
+          '• Alte Marktstr. 1, 66440 Blieskastel\n\n' +
+          'Telefon:\n' +
+          '• Homburg: 06841-8189700\n' +
+          '• Blieskastel: 06842-8059700\n\n' +
+          'E-Mail: info@faz-saar.de', [
+            { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+            { text: 'Rückruf anfordern', action: 'request_call' },
+            { text: 'Zurück zum Menü', action: 'menu' }
+          ]);
+      }
+      
+      // Request a call
+      function requestCall() {
+        addBotMessage('Gerne rufen wir Sie zurück. Bitte geben Sie Ihren Namen und Ihre Telefonnummer an (z.B. "Max Mustermann, 0123456789").');
+        chatState = 'requesting_call';
+      }
+      
+      // Start appointment process
+      function startAppointmentProcess() {
+        appointmentData = {};
+        addBotMessage('Gerne helfe ich Ihnen bei der Terminvereinbarung. Bitte geben Sie Ihren Vor- und Nachnamen an (z.B. "Anna Müller").');
+        chatState = 'asking_name';
+      }
+      
+      // Handle name input
+      function handleNameInput(input) {
+        const names = input.trim().split(' ');
+        if (names.length >= 2) {
+          appointmentData.firstName = names[0];
+          appointmentData.lastName = names.slice(1).join(' ');
+          addBotMessage(`Vielen Dank, ${appointmentData.firstName}. Bitte geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ an (z.B. "01.01.1980").`);
+          chatState = 'asking_birthdate';
+        } else {
+          addBotMessage('Bitte geben Sie sowohl Ihren Vor- als auch Nachnamen an (z.B. "Anna Müller").');
+        }
+      }
+      
+      // Handle birthdate input
+      function handleBirthdateInput(input) {
+        const dateRegex = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
+        const match = input.match(dateRegex);
+        
+        if (match) {
+          const day = parseInt(match[1], 10);
+          const month = parseInt(match[2], 10);
+          const year = parseInt(match[3], 10);
+          
+          if (day > 0 && day <= 31 && month > 0 && month <= 12 && year > 1900 && year <= new Date().getFullYear()) {
+            appointmentData.birthdate = input;
+            addBotMessage('Bitte geben Sie Ihre E-Mail-Adresse an, damit wir Ihnen eine Bestätigung senden können.');
+            chatState = 'asking_email';
+          } else {
+            addBotMessage('Das scheint kein gültiges Datum zu sein. Bitte geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ an (z.B. "01.01.1980").');
+          }
+        } else {
+          addBotMessage('Bitte geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ an (z.B. "01.01.1980").');
+        }
+      }
+      
+      // Handle email input
+      function handleEmailInput(input) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (emailRegex.test(input)) {
+          appointmentData.email = input;
+          addBotMessage('Bitte geben Sie Ihre Telefonnummer an (z.B. "0123456789").');
+          chatState = 'asking_phone';
+        } else {
+          addBotMessage('Das scheint keine gültige E-Mail-Adresse zu sein. Bitte versuchen Sie es erneut.');
+        }
+      }
+      
+      // Handle phone input
+      function handlePhoneInput(input) {
+        const phoneRegex = /^[0-9\s\+\-\(\)]{6,20}$/;
+        
+        if (phoneRegex.test(input)) {
+          appointmentData.phone = input;
+          askForLocation();
+        } else {
+          addBotMessage('Bitte geben Sie eine gültige Telefonnummer an (z.B. "0123456789").');
+        }
+      }
+      
+      // Ask for location
+      function askForLocation() {
+        addBotMessage('Bitte wählen Sie einen Standort für Ihren Termin:', [
+          { text: 'Homburg', action: 'custom', type: 'primary' },
+          { text: 'Blieskastel', action: 'custom' }
+        ]);
+        chatState = 'selecting_location';
+      }
+      
+      // Handle location selection
+      function handleLocationSelection(input) {
+        if (input.toLowerCase().includes('homburg') || input.toLowerCase().includes('blieskastel')) {
+          appointmentData.location = input.toLowerCase().includes('homburg') ? 'Homburg' : 'Blieskastel';
+          askForAppointmentReason();
+        } else {
+          addBotMessage('Bitte wählen Sie einen unserer Standorte:', [
+            { text: 'Homburg', action: 'custom', type: 'primary' },
+            { text: 'Blieskastel', action: 'custom' }
+          ]);
+        }
+      }
+      
+      // Ask for appointment reason
+      function askForAppointmentReason() {
+        addBotMessage('Bitte wählen Sie den Grund für Ihren Termin:', [
+          { text: 'Krebsvorsorge', action: 'custom', type: 'primary' },
+          { text: 'Brustultraschall', action: 'custom' },
+          { text: 'Kinderwunsch', action: 'custom' },
+          { text: 'Verhütung', action: 'custom' },
+          { text: 'Wechseljahre', action: 'custom' },
+          { text: 'Anderer Grund', action: 'custom' }
+        ]);
+        chatState = 'asking_reason';
+      }
+      
+      // Handle reason input
+      function handleReasonInput(input) {
+        appointmentData.reason = input;
+        findAvailableDates();
+      }
+      
+      // Find available dates
+      function findAvailableDates() {
+        addBotMessage('Ich suche nach verfügbaren Terminen für Sie...');
+        
+        // In a real implementation, you would fetch this from your API
+        // For demo purposes, we'll simulate a delay and show some dates
+        setTimeout(() => {
+          const today = new Date();
+          const availableDates = [];
+          
+          // Generate some sample dates (next 7 days excluding weekends)
+          for (let i = 1; i <= 7; i++) {
+            const date = new Date();
+            date.setDate(today.getDate() + i);
+            if (date.getDay() !== 0 && date.getDay() !== 6) {
+              availableDates.push(date);
+            }
+          }
+          
+          if (availableDates.length > 0) {
+            const formattedDates = availableDates.map(date => 
+              date.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })
+            );
+            
+            let message = 'Ich habe folgende Termine für Sie gefunden:\n\n';
+            formattedDates.forEach((date, index) => {
+              message += `${index + 1}. ${date}\n`;
+            });
+            
+            message += '\nBitte wählen Sie ein Datum (z.B. "1" für den ersten Termin).';
+            
+            appointmentData.availableDates = availableDates;
+            
+            addBotMessage(message);
+            chatState = 'selecting_date';
+          } else {
+            addBotMessage('Entschuldigung, momentan sind keine Termine verfügbar. Möchten Sie, dass wir Sie zurückrufen, um einen Termin zu vereinbaren?', [
+              { text: 'Ja, bitte zurückrufen', action: 'request_call', type: 'primary' },
+              { text: 'Nein, danke', action: 'menu' }
+            ]);
+            chatState = 'idle';
+          }
+        }, 2000);
+      }
+      
+      // Handle date selection
+      function handleDateSelection(input) {
+        const choice = parseInt(input, 10);
+        
+        if (!isNaN(choice) && choice > 0 && choice <= appointmentData.availableDates.length) {
+          const selectedDate = appointmentData.availableDates[choice - 1];
+          const formattedDate = selectedDate.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
+          
+          appointmentData.date = selectedDate;
+          appointmentData.formattedDate = formattedDate;
+          
+          findAvailableTimes(selectedDate);
+        } else {
+          addBotMessage('Bitte wählen Sie eine der angegebenen Optionen (z.B. "1" für den ersten Termin).');
+        }
+      }
+      
+      // Find available times for selected date
+      function findAvailableTimes(date) {
+        addBotMessage(`Ich suche verfügbare Uhrzeiten für den ${appointmentData.formattedDate}...`);
+        
+        // In a real implementation, you would fetch this from your API
+        // For demo purposes, we'll simulate a delay and show some times
+        setTimeout(() => {
+          const availableTimes = [
+            '08:00', '09:30', '11:00', '13:30', '15:00'
+          ];
+          
+          if (availableTimes.length > 0) {
+            let message = `Verfügbare Uhrzeiten am ${appointmentData.formattedDate}:\n\n`;
+            
+            availableTimes.forEach((time, index) => {
+              message += `${index + 1}. ${time} Uhr\n`;
+            });
+            
+            message += '\nBitte wählen Sie eine Uhrzeit (z.B. "1" für 08:00 Uhr).';
+            
+            appointmentData.availableTimes = availableTimes;
+            
+            addBotMessage(message);
+            chatState = 'selecting_time';
+          } else {
+            addBotMessage(`Entschuldigung, am ${appointmentData.formattedDate} sind keine Termine mehr verfügbar. Möchten Sie ein anderes Datum wählen?`, [
+              { text: 'Ja, anderes Datum', action: 'start_appointment', type: 'primary' },
+              { text: 'Nein, danke', action: 'menu' }
+            ]);
+            chatState = 'idle';
+          }
+        }, 1500);
+      }
+      
+      // Handle time selection
+      function handleTimeSelection(input) {
+        const choice = parseInt(input, 10);
+        
+        if (!isNaN(choice) && choice > 0 && choice <= appointmentData.availableTimes.length) {
+          appointmentData.time = appointmentData.availableTimes[choice - 1];
+          confirmAppointment();
+        } else {
+          addBotMessage('Bitte wählen Sie eine der angegebenen Optionen (z.B. "1" für 08:00 Uhr).');
+        }
+      }
+      
+      // Confirm appointment
+      function confirmAppointment() {
+        const confirmationMessage = `
+          Bitte bestätigen Sie Ihren Termin:\n\n
+          Name: ${appointmentData.firstName} ${appointmentData.lastName}\n
+          Geburtsdatum: ${appointmentData.birthdate}\n
+          Standort: ${appointmentData.location}\n
+          Grund: ${appointmentData.reason}\n
+          Datum: ${appointmentData.formattedDate}\n
+          Uhrzeit: ${appointmentData.time} Uhr\n\n
+          Stimmen die Daten?
+        `;
+        
+        addBotMessage(confirmationMessage, [
+          { text: 'Ja, Termin buchen', action: 'confirm_appointment', type: 'primary' },
+          { text: 'Nein, ändern', action: 'change_appointment' }
+        ]);
+      }
+      
+      // Finalize appointment booking
+      function finalizeAppointment() {
+        addBotMessage('Ihr Termin wird gebucht...');
+        
+        // In a real implementation, you would send this to your API
+        setTimeout(() => {
+          const confirmationMessage = `
+            Vielen Dank, ${appointmentData.firstName}!\n\n
+            Ihr Termin am ${appointmentData.formattedDate} um ${appointmentData.time} Uhr in ${appointmentData.location} wurde erfolgreich gebucht.\n\n
+            Sie erhalten eine Bestätigung per E-Mail an ${appointmentData.email}.\n\n
+            Möchten Sie noch etwas anderes tun?
+          `;
+          
+          addBotMessage(confirmationMessage, [
+            { text: 'Neuer Termin', action: 'start_appointment', type: 'primary' },
+            { text: 'Rezept anfordern', action: 'start_prescription' },
+            { text: 'Fertig', action: 'menu' }
+          ]);
+          
+          // Reset state
+          chatState = 'idle';
+          appointmentData = {};
+        }, 2000);
+      }
+      
+      // Change appointment
+      function changeAppointment() {
+        addBotMessage('Welchen Teil möchten Sie ändern?', [
+          { text: 'Datum', action: 'change_date', type: 'primary' },
+          { text: 'Uhrzeit', action: 'change_time' },
+          { text: 'Standort', action: 'change_location' },
+          { text: 'Grund', action: 'change_reason' },
+          { text: 'Abbrechen', action: 'cancel_appointment' }
+        ]);
+      }
+      
+      // Start prescription process
+      function startPrescriptionProcess() {
+        addBotMessage('Gerne helfe ich Ihnen bei der Rezeptanfrage. Bitte geben Sie Ihren Vor- und Nachnamen an (z.B. "Anna Müller").');
+        chatState = 'prescription_details';
+      }
+      
+      // Handle prescription details
+      function handlePrescriptionDetails(input) {
+        // In a real implementation, you would process the prescription request
+        addBotMessage('Vielen Dank für Ihre Rezeptanfrage. Wir bearbeiten diese und melden uns bei Ihnen, falls weitere Informationen benötigt werden.', [
+          { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+          { text: 'Zurück zum Menü', action: 'menu' }
+        ]);
+        chatState = 'idle';
+      }
+      
+      // Handle quick reply actions
+      function handleQuickReply(action) {
+        switch (action) {
+          case 'confirm_appointment':
+            finalizeAppointment();
+            break;
+          case 'change_appointment':
+            changeAppointment();
+            break;
+          case 'cancel_appointment':
+            addBotMessage('Die Terminvereinbarung wurde abgebrochen. Möchten Sie etwas anderes tun?', [
+              { text: 'Neuer Termin', action: 'start_appointment', type: 'primary' },
+              { text: 'Rezept anfordern', action: 'start_prescription' },
+              { text: 'Fertig', action: 'menu' }
+            ]);
+            chatState = 'idle';
+            break;
+          case 'menu':
+            addBotMessage('Wie kann ich Ihnen helfen?', [
+              { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+              { text: 'Rezept anfordern', action: 'start_prescription' },
+              { text: 'Öffnungszeiten', action: 'opening_hours' }
+            ]);
+            chatState = 'idle';
+            break;
+          default:
+            addBotMessage('Wie kann ich Ihnen weiterhelfen?', [
+              { text: 'Termin vereinbaren', action: 'start_appointment', type: 'primary' },
+              { text: 'Rezept anfordern', action: 'start_prescription' }
+            ]);
+        }
+      }
+      
+      // Close chat when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!chatbotContainer.contains(event.target) && event.target !== chatbotToggle) {
+          chatbotContainer.classList.remove('open');
+        }
+      });
     });
   </script>
 </body>
