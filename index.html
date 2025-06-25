@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frauenarztzentrum Saarpfalz</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timezone/1.0.23/timezone-with-data.min.js"></script>
+  <style>
+    body {
+      position: relative;
+      background-image: url('https://faz-saar.de/wp-content/uploads/2023/02/Wartezimmer-1200x800.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding-top: 80px;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      background-color: rgba(211, 211, 211, 0.7);
+      filter: blur(5px);
+      z-index: -2;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background-color: #7a5274;
+      padding: 10px 10px;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar img {
+      height: 90px;
+      margin-right: 50px;
+      background-color: white;
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: white;
+      padding: 15px 20px;
+      margin-right: 5px;
+      font-size: 18px;
+      transition: background-color 0.3s;
+    }
+
+    .navbar a:hover {
+      background-color: #575757;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+      padding-top: 150px;
+    }
+
+    .page-title {
+      font-size: 50px;
+      color: #A53055;
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+      font-size: 20px;
+      color: black;
+      margin-top: 5px;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+
+    .additional-text {
+      font-size: 25px;
+      color: black;
+      margin-top: 50px;
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+
+    .carousel-container {
+      position: relative;
+      margin: 10px auto;
+      max-width: 300px;
+      overflow: hidden;
+      border-radius: 8px;
+      z-index: 1;
+      background-color: rgba(245, 245, 245, 0.9);
+    }
+
+    .carousel {
+      display: flex;
+      width: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel img {
+      min-width: 100%;
+      height: auto;
+    }
+
+    .carousel .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 2;
+      border-radius: 50%;
+    }
+
+    .carousel .arrow.left { left: 10px; }
+    .carousel .arrow.right { right: 10px; }
+
+    /* Modal-Stile */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+    }
+    
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+    
+    /* Zurück-Button */
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 15px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #A53055;
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: none;
+    }
+    
+    /* Formularstile */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: black;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #A53055;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    /* Button-Stile */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #A53055;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      border: 2px solid #A53055;
+      margin: 0 auto; /* Diese Zeile zentriert den Button */
+      display: block; /* Damit margin: auto funktioniert */
+    }
+    
+    .btn:hover {
+      background-color: white;
+      color: black;
+    }
+    
+    .btn-secondary {
+      background-color: #f44336;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #d32f2f;
+    }
+    
+    /* Zeitauswahl */
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .time-slot {
+      padding: 10px;
+      text-align: center;
+      background-color: #A53055;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #A53055;
+    }
+    
+    .time-slot:hover {
+      background-color: white;
+      color: black;
+    }
+    
+    .time-slot.booked {
+      background-color: #cccccc;
+      color: #666666;
+      cursor: not-allowed;
+      border: 2px solid #999999;
+    }
+    
+    /* Standortauswahl */
+    .location-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .location-option {
+      padding: 15px;
+      text-align: center;
+      background-color: white;
+      color: #A53055;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #A53055;
+    }
+    
+    .location-option:hover {
+      background-color: white;
+      color: black;
+    }
+    
+    /* Terminart-Auswahl */
+    .appointment-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .appointment-option {
+      padding: 15px;
+      text-align: center;
+      background-color: white;
+      color: #A53055;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #A53055;
+    }
+    
+    .appointment-option:hover {
+      background-color: white;
+      color: black;
+    }
+    
+    /* Error messages */
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    /* Confirmation message */
+    .confirmation-message {
+      text-align: center;
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    .termin-btn {
+      background-color: #A53055;
+      color: white;
+      padding: 10px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 5px;
+      border: 2px solid #A53055;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .termin-btn:hover {
+      background-color: white;
+      color: black;
+      border: 2px solid #A53055;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    /* Neue Stile für die Titel */
+    .modal-title {
+      color: #A53055;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      color: #A53055;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <img src="prototyp/Webseite/Online/logo.png" alt="Logo">
+    <a href="index.html#sprechzeiten">Sprechzeiten</a>
+    <a href="index.html#aktuelles">Aktuelles</a>
+    <a href="team.html">Team</a>
+    <a href="Standorte.html">Standorte</a>
+    <a href="Leistungen.html">Leistungen</a>
+    <a href="index.html#kontakt">Kontakt</a>
+    <button class="termin-btn" id="myBtn">Termin vereinbaren</button>
+  </div>
+
+  <div class="content">
+    <h1 class="page-title">Frauenarztzentrum Saarpfalz</h1>
+    <p class="page-subtitle">Fachärztinnen für Gynäkologie und Geburtshilfe</p>
+    <p class="additional-text">
+      DR. MED. NICOLE NATALE | DR. MED. KATHY NEUMANN | SITA NGOUMOU | DR. MED FREDERIKE SCHLAEGEL
+    </p>
+  </div>
+
+  <div class="carousel-container" id="photoCarousel">
+    <div class="carousel">
+      <img src="static/images/Zeit.png" alt="Photo 1">
+      <img src="static/images/background2.png" alt="Photo 2">
+      <button class="arrow left">&#10094;</button>
+      <button class="arrow right">&#10095;</button>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="termin-btn" id="myBtn2">Termin vereinbaren</button>
+  </div>
+
+  <!-- Modal Dialog -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <button class="back-btn" id="backBtn">← Zurück</button>
+      
+      <!-- Standortauswahl -->
+      <div id="locationSelection">
+        <h2 class="modal-title">Wählen Sie ihren Standort</h2>
+        <div class="confirmation-message" id="locationConfirmation"></div>
+        <div class="location-options" id="locationOptionsContainer">
+          <div class="location-option" data-location="Homburg">Homburg</div>
+          <div class="location-option" data-location="Blieskastel">Blieskastel</div>
+        </div>
+      </div>
+      
+      <!-- Terminart-Auswahl -->
+      <div id="appointmentTypeSelection" style="display: none;">
+        <h2 class="modal-title">Terminart</h2>
+        <div class="confirmation-message" id="appointmentTypeConfirmation"></div>
+        <div class="appointment-options" id="appointmentOptionsContainer">
+          <div class="appointment-option" data-option="Beratung - Kinderwunsch">Beratung - Kinderwunsch</div>
+          <div class="appointment-option" data-option="Beratung - Verhütung/Wechseljahre">Beratung - Verhütung/Wechseljahre</div>
+          <div class="appointment-option" data-option="Brustultraschall">Brustultraschall</div>
+          <div class="appointment-option" data-option="Krebsvorsorge">Krebsvorsorge</div>
+          <div class="appointment-option" data-option="Krebsvorsorge + Brustultraschall">Krebsvorsorge + Brustultraschall</div>
+          <div class="appointment-option" data-option="Nachsorge Krebspatient">Nachsorge Krebspatient</div>
+          <div class="appointment-option" data-option="Teenagersprechstunde">Teenagersprechstunde</div>
+        </div>
+      </div>
+      
+      <!-- Datumsauswahl -->
+      <div id="dateSelection" style="display: none;">
+        <h2 class="modal-title">Wählen Sie ein Datum</h2>
+        <div class="confirmation-message" id="dateConfirmation"></div>
+        <div class="form-group">
+          <input type="text" id="bookingDate" class="flatpickr" placeholder="Datum auswählen">
+        </div>
+        <div class="error-message" id="date-error">Bitte wählen Sie ein Datum aus</div>
+      </div>
+      
+      <!-- Zeitauswahl -->
+      <div id="timeSelection" style="display: none;">
+        <h2 class="modal-title">Wählen Sie eine Uhrzeit</h2>
+        <div class="confirmation-message" id="timeConfirmation"></div>
+        <div class="time-slots" id="timeSlotsContainer"></div>
+        <div class="error-message" id="time-error">Bitte wählen Sie eine Uhrzeit aus</div>
+      </div>
+      
+      <!-- Patientendaten -->
+      <div id="customerForm" style="display: none;">
+        <h2 class="modal-title">Patientendaten</h2>
+        <form id="bookingForm">
+          <input type="hidden" id="selectedLocation">
+          <input type="hidden" id="selectedAppointmentType">
+          <input type="hidden" id="selectedDate">
+          <input type="hidden" id="selectedTime">
+          <input type="hidden" id="timezone" name="timezone" value="Europe/Paris">
+          
+          <div class="form-group">
+            <label for="customerName">Vorname*</label>
+            <input type="text" id="customerName" required>
+            <div class="error-message" id="name-error">Bitte geben Sie Ihren Vornamen ein</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="customerLastName">Nachname*</label>
+            <input type="text" id="customerLastName" required>
+            <div class="error-message" id="lastname-error">Bitte geben Sie Ihren Nachnamen ein</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="customerEmail">E-Mail*</label>
+            <input type="email" id="customerEmail" required>
+            <div class="error-message" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="customerPhone">Telefonnummer*</label>
+            <input type="tel" id="customerPhone" required>
+            <div class="error-message" id="phone-error">Bitte geben Sie Ihre Telefonnummer ein</div>
+          </div>
+          
+          <button type="submit" class="btn">Termin buchen</button>
+        </form>
+      </div>
+      
+      <!-- Bestätigungsnachricht -->
+      <div id="confirmationMessage" style="display: none;">
+        <h2 class="modal-title">Termin bestätigt!</h2>
+        <div class="confirmation-message">
+          <p>Vielen Dank für Ihre Terminbuchung.</p>
+          <p>Sie erhalten eine Bestätigung per E-Mail.</p>
+        </div>
+        <button class="btn" id="closeModal">Schließen</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Zeitzonenkonfiguration
+      const parisTimeZone = 'Europe/Paris';
+
+      // Hilfsfunktionen für Pariser Zeit
+      function convertToParisTime(date) {
+        return new Date(date.toLocaleString('en-US', { timeZone: parisTimeZone }));
+      }
+
+      function formatDateForParis(date) {
+        const d = convertToParisTime(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      function getCurrentParisTime() {
+        return convertToParisTime(new Date());
+      }
+
+      // DOM-Elemente
+      const modal = document.getElementById('bookingModal');
+      const openBtn = document.getElementById('myBtn');
+      const openBtn2 = document.getElementById('myBtn2');
+      const closeBtn = document.querySelector('.close');
+      const closeModalBtn = document.getElementById('closeModal');
+      const backBtn = document.getElementById('backBtn');
+      
+      // Formularabschnitte
+      const locationSelection = document.getElementById('locationSelection');
+      const appointmentTypeSelection = document.getElementById('appointmentTypeSelection');
+      const dateSelection = document.getElementById('dateSelection');
+      const timeSelection = document.getElementById('timeSelection');
+      const customerForm = document.getElementById('customerForm');
+      const confirmationMessage = document.getElementById('confirmationMessage');
+      
+      // Formularfelder
+      const bookingForm = document.getElementById('bookingForm');
+      const selectedLocationInput = document.getElementById('selectedLocation');
+      const selectedAppointmentTypeInput = document.getElementById('selectedAppointmentType');
+      const selectedDateInput = document.getElementById('selectedDate');
+      const selectedTimeInput = document.getElementById('selectedTime');
+      const dateInput = document.getElementById('bookingDate');
+      const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+      
+      // Bestätigungsnachrichten
+      const locationConfirmation = document.getElementById('locationConfirmation');
+      const appointmentTypeConfirmation = document.getElementById('appointmentTypeConfirmation');
+      const dateConfirmation = document.getElementById('dateConfirmation');
+      const timeConfirmation = document.getElementById('timeConfirmation');
+      
+      // Error messages
+      const errorMessages = {
+        date: document.getElementById('date-error'),
+        time: document.getElementById('time-error'),
+        name: document.getElementById('name-error'),
+        lastname: document.getElementById('lastname-error'),
+        email: document.getElementById('email-error'),
+        phone: document.getElementById('phone-error')
+      };
+      
+      // Öffne Modal
+      openBtn.addEventListener('click', () => {
+        modal.style.display = 'block';
+        resetForm();
+      });
+      
+      openBtn2.addEventListener('click', () => {
+        modal.style.display = 'block';
+        resetForm();
+      });
+      
+      // Schließe Modal
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        resetForm();
+      });
+      
+      closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        resetForm();
+      });
+      
+      // Schließe bei Klick außerhalb
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+          resetForm();
+        }
+      });
+      
+      // Standort auswählen
+      document.querySelectorAll('.location-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const location = option.getAttribute('data-location');
+          selectedLocationInput.value = location;
+          locationConfirmation.textContent = `Standort: ${location}`;
+          locationSelection.style.display = 'none';
+          appointmentTypeSelection.style.display = 'block';
+          backBtn.style.display = 'block';
+        });
+      });
+      
+      // Terminart auswählen
+      document.querySelectorAll('.appointment-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const appointmentType = option.getAttribute('data-option');
+          selectedAppointmentTypeInput.value = appointmentType;
+          appointmentTypeConfirmation.textContent = `Terminart: ${appointmentType}`;
+          appointmentTypeSelection.style.display = 'none';
+          dateSelection.style.display = 'block';
+          backBtn.style.display = 'block';
+        });
+      });
+      
+      // Initialisiere Datumspicker
+      flatpickr(dateInput, {
+        locale: 'de',
+        minDate: 'today',
+        dateFormat: 'd.m.Y',
+        altInput: true,
+        altFormat: 'Y-m-d',
+        onChange: function(selectedDates, dateStr) {
+          const parisDate = convertToParisTime(selectedDates[0]);
+          const formattedDate = formatDateForParis(parisDate);
+          selectedDateInput.value = formattedDate;
+          dateConfirmation.textContent = `Datum: ${dateStr}`;
+          dateSelection.style.display = 'none';
+          timeSelection.style.display = 'block';
+          backBtn.style.display = 'block';
+          
+          loadTimeSlots(formattedDate);
+        }
+      });
+      
+      // Lade verfügbare Zeiten
+      async function loadTimeSlots(date) {
+        timeSlotsContainer.innerHTML = '<p>Lade verfügbare Termine...</p>';
+        customerForm.style.display = 'none';
+        
+        try {
+          const response = await fetch(`/api/booked-times?date=${date}`);
+
+          if (!response.ok) {
+            throw new Error('Server nicht erreichbar');
+          }
+
+          const data = await response.json();
+
+          timeSlotsContainer.innerHTML = '';
+
+          if (data.availableTimes.length === 0) {
+            timeSlotsContainer.innerHTML = `
+              <p style="color: red; text-align: center;">
+                Keine freien Termine für ${dateInput.value} verfügbar
+              </p>
+              <button class="btn" onclick="goBackToDate()" style="margin: 10px auto; display: block;">
+                Anderes Datum wählen
+              </button>
+            `;
+            return;
+          }
+
+          data.allSlots.forEach(slot => {
+            const isBooked = data.bookedTimes.includes(slot);
+            const slotElement = document.createElement('div');
+            slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
+            slotElement.textContent = slot;
+            
+            if (isBooked) {
+              slotElement.title = 'Termin bereits vergeben';
+            } else {
+              slotElement.addEventListener('click', () => selectTimeSlot(slot));
+            }
+            
+            timeSlotsContainer.appendChild(slotElement);
+          });
+        } catch (error) {
+          console.error('Fehler:', error);
+          timeSlotsContainer.innerHTML = `
+            <p style="color: red; text-align: center;">
+              Terminverfügbarkeit konnte nicht geladen werden
+            </p>
+            <button class="btn" onclick="goBackToDate()" style="margin: 10px auto; display: block;">
+              Zurück
+            </button>
+          `;
+        }
+      }
+      
+      // Zeit auswählen
+      function selectTimeSlot(time) {
+        selectedTimeInput.value = time;
+        timeConfirmation.textContent = `Uhrzeit: ${time}`;
+        timeSelection.style.display = 'none';
+        customerForm.style.display = 'block';
+        backBtn.style.display = 'block';
+        
+        // Scroll zum Formular
+        customerForm.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Zurück-Button-Funktionalität
+      backBtn.addEventListener('click', () => {
+        if (customerForm.style.display === 'block') {
+          customerForm.style.display = 'none';
+          timeSelection.style.display = 'block';
+        } else if (timeSelection.style.display === 'block') {
+          timeSelection.style.display = 'none';
+          dateSelection.style.display = 'block';
+        } else if (dateSelection.style.display === 'block') {
+          dateSelection.style.display = 'none';
+          appointmentTypeSelection.style.display = 'block';
+        } else if (appointmentTypeSelection.style.display === 'block') {
+          appointmentTypeSelection.style.display = 'none';
+          locationSelection.style.display = 'block';
+          backBtn.style.display = 'none';
+        }
+      });
+      
+      function goBackToDate() {
+        timeSelection.style.display = 'none';
+        dateSelection.style.display = 'block';
+      }
+      
+      // Formular absenden mit Validierung
+      bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Validierung
+        let isValid = true;
+        
+        if (!document.getElementById('customerName').value.trim()) {
+          errorMessages.name.style.display = 'block';
+          isValid = false;
+        } else {
+          errorMessages.name.style.display = 'none';
+        }
+        
+        if (!document.getElementById('customerLastName').value.trim()) {
+          errorMessages.lastname.style.display = 'block';
+          isValid = false;
+        } else {
+          errorMessages.lastname.style.display = 'none';
+        }
+        
+        const email = document.getElementById('customerEmail').value;
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          errorMessages.email.style.display = 'block';
+          isValid = false;
+        } else {
+          errorMessages.email.style.display = 'none';
+        }
+        
+        if (!document.getElementById('customerPhone').value.trim()) {
+          errorMessages.phone.style.display = 'block';
+          isValid = false;
+        } else {
+          errorMessages.phone.style.display = 'none';
+        }
+        
+        if (!isValid) return;
+        
+        const nowInParis = getCurrentParisTime();
+        
+        const appointmentData = {
+          vorname: document.getElementById('customerName').value.trim(),
+          nachname: document.getElementById('customerLastName').value.trim(),
+          email: document.getElementById('customerEmail').value.trim(),
+          telefon: document.getElementById('customerPhone').value.trim(),
+          standort: selectedLocationInput.value,
+          terminart: selectedAppointmentTypeInput.value,
+          date: selectedDateInput.value,
+          time: selectedTimeInput.value,
+          timezone: parisTimeZone,
+          created_at: nowInParis.toISOString(),
+          local_created_at: nowInParis.toLocaleString('de-DE', { timeZone: parisTimeZone })
+        };
+        
+        // Sende Formulardaten mit Konfliktbehandlung
+        console.log('Sende Termindaten:', appointmentData);
+        
+        fetch('/submit-form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(appointmentData)
+        })
+        .then(response => {
+          if (response.status === 409) {
+            alert('Dieser Termin wurde bereits vergeben. Bitte wählen Sie einen anderen Zeitpunkt.');
+            timeSelection.style.display = 'block';
+            customerForm.style.display = 'none';
+            document.getElementById('bookingDate').dispatchEvent(new Event('change'));
+            throw new Error('Termin bereits vergeben');
+          }
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data && data.success) {
+            customerForm.style.display = 'none';
+            confirmationMessage.style.display = 'block';
+            backBtn.style.display = 'none';
+            saveAppointmentToLocalStorage(appointmentData);
+          }
+        })
+        .catch(error => {
+          if (error.message !== 'Termin bereits vergeben') {
+            console.error('Error:', error);
+            alert('Es gab ein Problem mit der Verbindung. Bitte versuchen Sie es später erneut.');
+          }
+        });
+      });
+      
+      // In localStorage speichern
+      function saveAppointmentToLocalStorage(appointment) {
+        try {
+          const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+          appointments.push({
+            ...appointment,
+            timestamp: getCurrentParisTime().toISOString()
+          });
+          localStorage.setItem('appointments', JSON.stringify(appointments));
+        } catch (e) {
+          console.error('Could not save to localStorage', e);
+        }
+      }
+      
+      // Formular zurücksetzen
+      function resetForm() {
+        bookingForm.reset();
+        locationSelection.style.display = 'block';
+        appointmentTypeSelection.style.display = 'none';
+        dateSelection.style.display = 'none';
+        timeSelection.style.display = 'none';
+        customerForm.style.display = 'none';
+        confirmationMessage.style.display = 'none';
+        backBtn.style.display = 'none';
+        
+        selectedLocationInput.value = '';
+        selectedAppointmentTypeInput.value = '';
+        selectedDateInput.value = '';
+        selectedTimeInput.value = '';
+        dateInput.value = '';
+        timeSlotsContainer.innerHTML = '';
+        
+        locationConfirmation.textContent = '';
+        appointmentTypeConfirmation.textContent = '';
+        dateConfirmation.textContent = '';
+        timeConfirmation.textContent = '';
+        
+        Object.values(errorMessages).forEach(msg => msg.style.display = 'none');
+      }
+      
+      // Nachrichtenaustausch für Terminaktualisierungen
+      window.addEventListener('message', function(event) {
+        if (event.data.type === 'APPOINTMENT_DELETED') {
+          const currentDate = document.getElementById('bookingDate').value;
+          if (currentDate) {
+            document.getElementById('bookingDate').dispatchEvent(new Event('change'));
+          }
+        }
+      });
+      
+      // Carousel-Funktionalität
+      let currentIndex = 0;
+      const carousel = document.querySelector('.carousel');
+      const images = document.querySelectorAll('.carousel img');
+      const totalImages = images.length;
+      
+      const showImage = (index) => {
+        currentIndex = index;
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      };
+      
+      document.querySelector('.carousel .arrow.left').onclick = () => {
+        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+        showImage(currentIndex);
+      };
+      
+      document.querySelector('.carousel .arrow.right').onclick = () => {
+        currentIndex = (currentIndex + 1) % totalImages;
+        showImage(currentIndex);
+      };
+      
+      // Auto-rotate carousel
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % totalImages;
+        showImage(currentIndex);
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
